@@ -3,9 +3,7 @@
         <h2>干瞪眼</h2>
         <el-row>
             <el-col :span="4">
-                <div>
-                    <el-button @click="addPlayer">Add player</el-button>
-                </div>
+                <OperationPanel :game="game"></OperationPanel>
             </el-col>
             <el-col :span="20">
                 <RecordTable :game="game"></RecordTable>
@@ -16,6 +14,7 @@
 
 <script>
     import RecordTable from "pages/GanDengYan/RecordTable"
+    import OperationPanel from "pages/GanDengYan/OperationPanel"
 
     class Player {
         constructor(name, winCount, winCountFirst, winCountLast, score, scoreFirst, scoreLast) {
@@ -66,17 +65,8 @@
                 game: new Game()
             }
         },
-        methods: {
-            addPlayer: function () {
-                this.$prompt("Player's name:", "Add Player", {
-                    confirmButtonText: "Confirm",
-                    cancelButtonText: "Cancel"
-                }).then(({value}) => {
-                    this.game.addNewPlayer(value);
-                });
-            }
-        },
         components: {
+            OperationPanel,
             RecordTable
         },
         mounted() {
