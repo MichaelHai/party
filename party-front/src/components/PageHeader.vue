@@ -25,9 +25,11 @@
 
     .menu-item, .el-submenu__title {
         font-size: 18px;
+        width: 82px;
+        text-align: center;
     }
 
-    .menu-item.is-active, el-submenu__title.is-active {
+    .menu-item.is-active, .el-submenu.is-active>.el-submenu__title {
         font-size: 20px;
         font-weight: bold;
         border-bottom-color: #20A0FF;
