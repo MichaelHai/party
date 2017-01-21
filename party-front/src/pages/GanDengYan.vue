@@ -1,58 +1,22 @@
 <template>
     <div id="wrapper">
         <h2>干瞪眼</h2>
-        <div id="table_wrapper">
-            <el-table
-                    :data="game.records"
-                    style="width: 100%"
-                    border
-            >
-                <el-table-column
-                        fixed
-                        prop="bang"
-                        label="Bang!"
-                        align="center"
-                >
-                    <template scope="scope">
-                        <div :class="'bangLevel-' + ((scope.row.bang <= 5) ? scope.row.bang : 5)">{{ scope.row.bang }}
-                        </div>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        v-for="player in game.players"
-                        :prop="player.name"
-                        :label="player.name"
-                        align="center"
-                >
-                    <el-table-column
-                            :prop="player.name"
-                            align="center"
-                            :render-header="winCountHeaderRenderer"
-                    >
-                        <template scope="scope">
-                            <div :class="getRemainingCardIndicator(scope.column.property, scope.$index)">
-                                {{ getRemain(scope.column.property, scope.$index) }}
-                            </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            :prop="player.name"
-                            align="center"
-                            :render-header="scoreHeaderRenderer"
-                    >
-                        <template scope="scope">
-                            <div :class="getRemainingCardIndicator(scope.column.property, scope.$index)">
-                                {{ getScore(scope.column.property, scope.$index) }}
-                            </div>
-                        </template>
-                    </el-table-column>
-                </el-table-column>
-            </el-table>
-        </div>
+        <el-row>
+            <el-col :span="4">
+                <div>
+                    <el-button @click="addPlayer">Add player</el-button>
+                </div>
+            </el-col>
+            <el-col :span="20">
+                <RecordTable :game="game"></RecordTable>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
 <script>
+    import RecordTable from "pages/GanDengYan/RecordTable"
+
     class Player {
         constructor(name, winCount, winCountFirst, winCountLast, score, scoreFirst, scoreLast) {
             this.name = name;
@@ -79,6 +43,10 @@
             this._players.push(player);
         }
 
+        addNewPlayer(playerName) {
+            this.addPlayer(new Player(playerName, 0, false, false, 0, false, false));
+        }
+
         addRecord(round) {
             this._records.push(round);
         }
@@ -99,46 +67,17 @@
             }
         },
         methods: {
-            winCountHeaderRenderer: function (h, data) {
-                let player = this.game.getPlayer(data.$index / 2);
-                return h(
-                    "div",
-                    {
-                        'class': {
-                            first: player.winCountFirst,
-                            last: player.winCountLast
-                        }
-                    },
-                    [player.winCount]
-                )
-            },
-            scoreHeaderRenderer: function (h, data) {
-                let player = this.game.getPlayer(parseInt(data.$index / 2));
-                return h(
-                    "div",
-                    {
-                        'class': {
-                            first: player.scoreFirst,
-                            last: player.scoreLast
-                        }
-                    },
-                    [player.score]
-                )
-            },
-            getRemainingCardIndicator: function (player, index) {
-                let remain = this.getRemainCards(player, index);
-                return remain === 0 ? 'empty_hand' : (remain === 5 ? 'full_hand' : '');
-            },
-            getRemain: function (player, index) {
-                let remain = this.getRemainCards(player, index);
-                return remain === -1 ? '/' : remain;
-            },
-            getScore: function (player, index) {
-                return this.getRemainCards(player, index) === -1 ? '/' : this.game.records[index][player].score;
-            },
-            getRemainCards: function (player, index) {
-                return this.game.records[index][player].remain;
+            addPlayer: function () {
+                this.$prompt("Player's name:", "Add Player", {
+                    confirmButtonText: "Confirm",
+                    cancelButtonText: "Cancel"
+                }).then(({value}) => {
+                    this.game.addNewPlayer(value);
+                });
             }
+        },
+        components: {
+            RecordTable
         },
         mounted() {
             this.game.addPlayer(new Player("wh", 1, true, false, 10, true, false));
@@ -151,10 +90,6 @@
                 },
                 cxy: {
                     remain: 1,
-                    score: -1
-                },
-                zxc: {
-                    remain: -1,
                     score: -1
                 },
                 bang: 0
@@ -241,38 +176,5 @@
 <style scope>
     #wrapper {
         padding-top: 20px;
-    }
-
-    thead div.first, tbody td .empty_hand {
-        color: limegreen;
-        font-weight: bolder;
-    }
-
-    thead div.last, tbody td .full_hand {
-        color: #ff4444;
-        font-weight: bolder;
-    }
-
-    tbody td .bangLevel-1 {
-        color: #ff4444;
-    }
-
-    tbody td .bangLevel-2 {
-        color: #ff4444;
-    }
-
-    tbody td .bangLevel-3 {
-        color: #ff4444;
-        font-weight: bold;
-    }
-
-    tbody td .bangLevel-4 {
-        color: #ff4444;
-        font-weight: bold;
-    }
-
-    tbody td .bangLevel-5 {
-        color: #ff4444;
-        font-weight: bolder;
     }
 </style>
