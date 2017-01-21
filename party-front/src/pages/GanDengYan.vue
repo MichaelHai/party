@@ -27,8 +27,8 @@
                         :render-header="winCountHeaderRenderer"
                 >
                     <template scope="scope">
-                        <div :class="scope.row[scope.column.property+'_remain'] === 0 ? 'empty_hand' : (scope.row[scope.column.property+'_remain'] === 5 ? 'full_hand' : '')">
-                            {{ scope.row[scope.column.property+'_remain'] == -1 ? '/' : scope.row[scope.column.property+'_remain'] }}
+                        <div :class="getRemainingCardIndicator(scope.column.property, scope.$index)">
+                            {{ getRemain(scope.column.property, scope.$index) }}
                         </div>
                     </template>
                 </el-table-column>
@@ -38,8 +38,8 @@
                         :render-header="scoreHeaderRenderer"
                 >
                     <template scope="scope">
-                        <div :class="scope.row[scope.column.property+'_remain'] === 0 ? 'empty_hand' : (scope.row[scope.column.property+'_remain'] === 5 ? 'full_hand' : '')">
-                            {{ scope.row[scope.column.property+'_remain'] == -1 ? '/' : scope.row[scope.column.property+'_score'] }}
+                        <div :class="getRemainingCardIndicator(scope.column.property, scope.$index)">
+                            {{ getScore(scope.column.property, scope.$index) }}
                         </div>
                     </template>
                 </el-table-column>
@@ -97,62 +97,112 @@
                     },
                     [player.score]
                 )
+            },
+            getRemainingCardIndicator: function(player, index) {
+                let remain = this.getRemainCards(player, index);
+                return remain === 0 ? 'empty_hand' : (remain === 5 ? 'full_hand' : '');
+            },
+            getRemain: function(player, index) {
+                let remain = this.getRemainCards(player, index);
+                return remain === -1 ? '/' : remain;
+            },
+            getScore: function(player, index) {
+                return this.getRemainCards(player, index) === -1 ? '/' : this.records[index][player].score;
+            },
+            getRemainCards: function(player, index) {
+                return this.records[index][player].remain;
             }
         },
         mounted() {
             this.players.push(new Player("zxc", 0, false, false, 0, false, true));
             this.records.push({
-                wh_remain: 0,
-                wh_score: 1,
-                cxy_remain: 1,
-                cxy_score: -1,
-                zxc_remain: -1,
-                zxc_score: -1,
+                wh: {
+                    remain: 0,
+                    score: 1
+                },
+                cxy: {
+                    remain: 1,
+                    score: -1
+                },
+                zxc: {
+                    remain: -1,
+                    score: -1
+                },
                 bang: 0
             });
             this.records.push({
-                wh_remain: 22,
-                wh_score: 1,
-                cxy_remain: 5,
-                cxy_score: -20,
-                zxc_remain: 1,
-                zxc_score: -2,
+                wh: {
+                    remain: 22,
+                    score: 1
+                },
+                cxy: {
+                    remain: 5,
+                    score: -10
+                },
+                zxc: {
+                    remain: 1,
+                    score: -2
+                },
                 bang: 1
             });
             this.records.push({
-                wh_remain: 1,
-                wh_score: -4,
-                cxy_remain: 0,
-                cxy_score: 8,
-                zxc_remain: 1,
-                zxc_score: -4,
+                wh: {
+                    remain: 1,
+                    score: -4
+                },
+                cxy: {
+                    remain: 0,
+                    score: -8
+                },
+                zxc: {
+                    remain: -1,
+                    score: -4
+                },
                 bang: 2
             });
             this.records.push({
-                wh_remain: 1,
-                wh_score: -8,
-                cxy_remain: 1,
-                cxy_score: -8,
-                zxc_remain: 0,
-                zxc_score: 16,
+                wh: {
+                    remain: 1,
+                    score: -8
+                },
+                cxy: {
+                    remain: 1,
+                    score: -8
+                },
+                zxc: {
+                    remain: 0,
+                    score: 16
+                },
                 bang: 3
             });
             this.records.push({
-                wh_remain: 1,
-                wh_score: -16,
-                cxy_remain: 0,
-                cxy_score: 32,
-                zxc_remain: 1,
-                zxc_score: -16,
+                wh: {
+                    remain: 1,
+                    score: -16
+                },
+                cxy: {
+                    remain: 0,
+                    score: 32
+                },
+                zxc: {
+                    remain: 1,
+                    score: -16
+                },
                 bang: 4
             });
             this.records.push({
-                wh_remain: 0,
-                wh_score: 352,
-                cxy_remain: 1,
-                cxy_score: -32,
-                zxc_remain: 5,
-                zxc_score: -320,
+                wh: {
+                    remain: 0,
+                    score: 352
+                },
+                cxy: {
+                    remain: 1,
+                    score: -32
+                },
+                zxc: {
+                    remain: 5,
+                    score: -320
+                },
                 bang: 5
             });
         }
