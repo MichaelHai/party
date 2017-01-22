@@ -100,4 +100,8 @@
     .el-input-number__decrease, .el-input-number__increase {
         top: 4px;
     }
+
+    .el-rate {
+        display: flex;
+    }
 </style>
