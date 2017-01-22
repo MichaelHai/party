@@ -21,11 +21,11 @@
             <el-button @click="record" type="info">Record</el-button>
             <el-button @click="playerSettingVisible = true">Change Players</el-button>
         </el-form>
-        <el-dialog title="Change Players" v-model="playerSettingVisible" size="tiny" @close="playerSettingClosed">
+        <el-dialog title="Change Players" v-model="playerSettingVisible" size="tiny">
             <el-row>
                 <el-col :span="12">
                     <h2 class="listTitle">In Game Players</h2>
-                    <draggable :list="game.players" class="dragArea" :options="{group:'people'}">
+                    <draggable :list="game.players" class="dragArea" :options="{group:'people'}" @change="initData">
                         <el-card v-for="player in game.players" :key="player.name" class="playerCard">
                             {{ player.name }}
                         </el-card>
@@ -92,21 +92,21 @@
                     return;
                 }
                 record.bang = this.bang;
-                console.log(record);
 
-                this.remain = [];
-                this.winner = null;
-                this.disabled = [];
-                this.bang = 0;
-            },
-            playerSettingClosed: function () {
-                this.$emit("playerChanged");
+                this.game.record(record);
+                this.initData();
             },
             addPlayer: function() {
                 if (this.nameToAdd !== null) {
                     this.game.addNewPlayer(this.nameToAdd);
                     this.nameToAdd = null;
                 }
+            },
+            initData: function() {
+                this.remain = [];
+                this.winner = null;
+                this.disabled = [];
+                this.bang = 0;
             }
         }
     }
