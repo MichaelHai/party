@@ -19,12 +19,35 @@
                 <el-input-number v-model="bang" :min="0" size="small"></el-input-number>
             </el-form-item>
             <el-button @click="record" type="info">Record</el-button>
-            <el-button @click="addPlayer">Add player</el-button>
+            <el-button @click="playerSettingVisible = true">Change Players</el-button>
         </el-form>
+        <el-dialog title="Change Players" v-model="playerSettingVisible" size="tiny" @close="playerSettingClosed">
+            <el-row>
+                <el-col :span="12">
+                    <h2 class="listTitle">In Game Players</h2>
+                    <draggable :list="game.players" class="dragArea" :options="{group:'people'}">
+                        <el-card v-for="player in game.players" :key="player.name" class="playerCard">
+                            {{ player.name }}
+                        </el-card>
+                    </draggable>
+                </el-col>
+                <el-col :span="12">
+                    <h2 class="listTitle">Waiting Players</h2>
+                    <draggable :list="game.waitingPlayers" class="dragArea" :options="{group:'people'}">
+                        <el-card v-for="player in game.waitingPlayers" :key="player.name" class="playerCard">
+                            {{ player.name }}
+                        </el-card>
+                    </draggable>
+                </el-col>
+            </el-row>
+            <el-input v-model="nameToAdd" placeholder="Add to game" v-on:keyup.enter.native="addPlayer"></el-input>
+        </el-dialog>
     </div>
 </template>
 
 <script>
+    import Draggable from "vuedraggable"
+
     export default {
         props: ["game"],
         data() {
@@ -32,18 +55,15 @@
                 remain: [],
                 winner: null,
                 disabled: [],
-                bang: 0
+                bang: 0,
+                playerSettingVisible: false,
+                nameToAdd: null
             }
         },
+        components: {
+            Draggable
+        },
         methods: {
-            addPlayer: function () {
-                this.$prompt("Player's name:", "Add Player", {
-                    confirmButtonText: "Confirm",
-                    cancelButtonText: "Cancel"
-                }).then(({value}) => {
-                    this.game.addNewPlayer(value);
-                }).catch();
-            },
             winnerChanged: function () {
                 let players = this.game.players;
                 let winnerIndex = players.findIndex((player) => {
@@ -78,6 +98,15 @@
                 this.winner = null;
                 this.disabled = [];
                 this.bang = 0;
+            },
+            playerSettingClosed: function () {
+                this.$emit("playerChanged");
+            },
+            addPlayer: function() {
+                if (this.nameToAdd !== null) {
+                    this.game.addNewPlayer(this.nameToAdd);
+                    this.nameToAdd = null;
+                }
             }
         }
     }
@@ -103,5 +132,26 @@
 
     .el-rate {
         display: flex;
+    }
+
+    .listTitle {
+        margin: auto;
+        text-align: center;
+    }
+
+    .playerCard {
+        width: 100px;
+        margin: 10px auto;
+    }
+
+    .playerCard > div {
+        margin: auto;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .dragArea {
+        min-height: 10px;
+        width: 100%;
     }
 </style>

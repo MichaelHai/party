@@ -6,7 +6,7 @@
                 <OperationPanel :game="game"></OperationPanel>
             </el-col>
             <el-col :span="18">
-                <RecordTable :game="game"></RecordTable>
+                <RecordTable :game="game" ref="recordTable"></RecordTable>
             </el-col>
         </el-row>
     </div>
@@ -15,6 +15,7 @@
 <script>
     import RecordTable from "pages/GanDengYan/RecordTable"
     import OperationPanel from "pages/GanDengYan/OperationPanel"
+    import Vue from "vue"
 
     class Player {
         constructor(name, winCount, winCountFirst, winCountLast, score, scoreFirst, scoreLast, rank) {
@@ -33,14 +34,23 @@
         constructor() {
             this._players = [];
             this._records = [];
+            this._waitingPlayers = [];
         }
 
-        getPlayer(index) {
-            return this._players[index];
+        getPlayer(name) {
+            let player = this._players.find((currentPlayer) => {
+                return name == currentPlayer.name;
+            }, this);
+            if (player === undefined) {
+                player = this._waitingPlayers.find((currentPlayer) => {
+                    return name == currentPlayer.name;
+                }, this);
+            }
+            return player;
         }
 
         addPlayer(player) {
-            this._players.push(player);
+            this._waitingPlayers.push(player);
         }
 
         addNewPlayer(playerName) {
@@ -57,6 +67,14 @@
 
         get players() {
             return this._players;
+        }
+
+        get waitingPlayers() {
+            return this._waitingPlayers;
+        }
+
+        get allPlayers() {
+            return this._players.concat(this._waitingPlayers);
         }
     }
 

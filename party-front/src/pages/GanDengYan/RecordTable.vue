@@ -16,7 +16,7 @@
             </template>
         </el-table-column>
         <el-table-column
-                v-for="player in game.players"
+                v-for="player in game.allPlayers"
                 :prop="player.name"
                 :label="player.name"
                 align="center"
@@ -52,7 +52,7 @@
         props: ["game"],
         methods: {
             winCountHeaderRenderer: function (h, data) {
-                let player = this.game.getPlayer(data.$index / 2);
+                let player = this.game.getPlayer(data.column.property);
                 return h(
                     "div",
                     {
@@ -65,7 +65,7 @@
                 )
             },
             scoreHeaderRenderer: function (h, data) {
-                let player = this.game.getPlayer(parseInt(data.$index / 2));
+                let player = this.game.getPlayer(data.column.property);
                 return h(
                     "div",
                     {
@@ -128,5 +128,14 @@
     tbody td .bangLevel-5 {
         color: #ff4444;
         font-weight: bolder;
+    }
+
+    .waiting, .waiting div {
+        color: darkgray !important;
+        background-color: darkgray !important;
+    }
+
+    .hide {
+        display: none;
     }
 </style>
