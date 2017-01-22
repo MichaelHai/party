@@ -2,10 +2,10 @@
     <div id="wrapper">
         <h2>干瞪眼</h2>
         <el-row>
-            <el-col :span="4">
+            <el-col :span="6">
                 <OperationPanel :game="game"></OperationPanel>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="18">
                 <RecordTable :game="game"></RecordTable>
             </el-col>
         </el-row>
@@ -17,7 +17,7 @@
     import OperationPanel from "pages/GanDengYan/OperationPanel"
 
     class Player {
-        constructor(name, winCount, winCountFirst, winCountLast, score, scoreFirst, scoreLast) {
+        constructor(name, winCount, winCountFirst, winCountLast, score, scoreFirst, scoreLast, rank) {
             this.name = name;
             this.winCount = winCount;
             this.winCountFirst = winCountFirst;
@@ -25,6 +25,7 @@
             this.score = score;
             this.scoreFirst = scoreFirst;
             this.scoreLast = scoreLast;
+            this.rank = rank;
         }
     }
 
@@ -43,7 +44,7 @@
         }
 
         addNewPlayer(playerName) {
-            this.addPlayer(new Player(playerName, 0, false, false, 0, false, false));
+            this.addPlayer(new Player(playerName, 0, false, false, 0, false, false, 4));
         }
 
         addRecord(round) {
@@ -70,9 +71,9 @@
             RecordTable
         },
         mounted() {
-            this.game.addPlayer(new Player("wh", 1, true, false, 10, true, false));
-            this.game.addPlayer(new Player("cxy", 0, false, true, 0, false, true));
-            this.game.addPlayer(new Player("zxc", 0, false, false, 0, false, true));
+            this.game.addPlayer(new Player("wh", 1, true, false, 10, true, false, 1));
+            this.game.addPlayer(new Player("cxy", 0, false, true, 0, false, true, 2));
+            this.game.addPlayer(new Player("zxc", 0, false, false, 0, false, true, 3));
             this.game.addRecord({
                 wh: {
                     remain: 0,
