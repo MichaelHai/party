@@ -5,10 +5,10 @@
             <el-tab-pane label="Current" name="0">
                 <el-row>
                     <el-col :span="6">
-                        <OperationPanel :game="game"></OperationPanel>
+                        <OperationPanel :game="game" @GameOver="gameOver"></OperationPanel>
                     </el-col>
                     <el-col :span="18">
-                        <RecordTable :game="game" ref="recordTable"></RecordTable>
+                        <RecordTable :game="game"></RecordTable>
                     </el-col>
                 </el-row>
             </el-tab-pane>
@@ -91,6 +91,12 @@
         get allPlayers() {
             return this._players.concat(this._waitingPlayers);
         }
+
+        get winner() {
+            return this._players.find((currentPlayer) => {
+                return currentPlayer.rank == 1;
+            }).name;
+        }
     }
 
     export default {
@@ -98,8 +104,7 @@
             return {
                 game: new Game(),
                 history: [],
-                activeTabName: "0",
-                tabCount: 0
+                activeTabName: "0"
             }
         },
         methods: {
@@ -111,22 +116,19 @@
                     this.activeTabName = tab.name;
                 }
             },
-            tabRemoved: function() {
-                this.tabCount--;
-                this.activeTabName =  '' + this.tabCount;
+            tabRemoved: function () {
+                this.activeTabName = '0';
             },
-            addHistory: function() {
+            addHistory: function () {
                 this.history.push({
                     date: "2016-01-14"
                 });
-                this.tabCount++;
-            }
-        },
-        watch: {
-            activeTabName: function(val) {
-                if (val == "Add") {
-                    this.activeTabName =  '' + this.tabCount;
-                }
+            },
+            gameOver: function() {
+                this.$message({
+                    message: this.game.winner + " wins!",
+                    type: "success"
+                });
             }
         },
         components: {

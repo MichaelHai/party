@@ -18,8 +18,11 @@
             <el-form-item label="Bang!">
                 <el-input-number v-model="bang" :min="0" size="small"></el-input-number>
             </el-form-item>
-            <el-button @click="record" type="info">Record</el-button>
-            <el-button @click="playerSettingVisible = true">Change Players</el-button>
+            <span>
+                <el-button @click="record" type="info" size="small">Record</el-button>
+                <el-button @click="$emit('GameOver')" type="danger" size="small">Game Over</el-button>
+                <el-button @click="playerSettingVisible = true" type="primary" icon="setting" size="small"></el-button>
+            </span>
         </el-form>
         <el-dialog title="Change Players" v-model="playerSettingVisible" size="tiny">
             <el-row>
@@ -96,17 +99,19 @@
                 this.game.record(record);
                 this.initData();
             },
-            addPlayer: function() {
+            addPlayer: function () {
                 if (this.nameToAdd !== null) {
                     this.game.addNewPlayer(this.nameToAdd);
                     this.nameToAdd = null;
                 }
             },
-            initData: function() {
+            initData: function () {
                 this.remain = [];
                 this.winner = null;
                 this.disabled = [];
                 this.bang = 0;
+            },
+            gameOver: function () {
             }
         }
     }
