@@ -1,8 +1,8 @@
 <template>
     <div id="wrapper">
         <h2>干瞪眼</h2>
-        <el-tabs type="card" >
-            <el-tab-pane v-for="game in games" label="Current" :key="game.id">
+        <el-tabs type="card" :activeName="activeTabName">
+            <el-tab-pane v-for="game in games" label="Current" :key="game.id" :name="game.id">
                 <el-row>
                     <el-col :span="6">
                         <OperationPanel :game="game" @GameOver="gameOver"></OperationPanel>
@@ -12,7 +12,7 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane v-for="(historyGame, index) in history" :label="historyGame.date" :name="'' + (index+1)"
+            <el-tab-pane v-for="(historyGame, index) in history" :label="historyGame.date" :name="historyGame.game.id" :key="historyGame.game.id"
                          closable>
                 <RecordTable :game="historyGame.game"></RecordTable>
             </el-tab-pane>
@@ -118,17 +118,18 @@
             gameOver: function () {
                 let winner = this.game.winner;
                 if (winner !== null) {
+                    let currentGame = this.game;
+                    this.game = new Game();
+                    this.games.pop();
+                    this.games.push(this.game);
                     this.$message({
-                        message: this.game.winner + " wins!",
+                        message: currentGame.winner + " wins!",
                         type: "success"
                     });
                     this.history.push({
                         date: new Date().toDateString(),
-                        game: this.game
+                        game: currentGame
                     });
-                    this.game = new Game();
-                    this.games.pop();
-                    this.games.push(this.game);
                 }
             }
         },
@@ -228,6 +229,7 @@
             });
 
             this.games.push(this.game);
+            this.activeTabName = this.game.id;
         }
     }
 </script>
