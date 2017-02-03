@@ -15,12 +15,12 @@
                     </el-form-item>
                 </template>
             </el-radio-group>
-            <el-form-item label="Bang!">
+            <el-form-item v-if="game.players.length > 0" label="Bang!">
                 <el-input-number v-model="bang" :min="0" size="small"></el-input-number>
             </el-form-item>
             <span>
                 <el-button @click="record" type="info" size="small">Record</el-button>
-                <el-button @click="$emit('GameOver')" type="danger" size="small">Game Over</el-button>
+                <el-button @click="gameOver" type="danger" size="small">Game Over</el-button>
                 <el-button @click="playerSettingVisible = true" type="primary" icon="setting" size="small"></el-button>
             </span>
         </el-form>
@@ -112,6 +112,7 @@
                 this.bang = 0;
             },
             gameOver: function () {
+                this.$emit('GameOver');
             }
         }
     }

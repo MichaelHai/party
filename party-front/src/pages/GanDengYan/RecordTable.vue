@@ -1,4 +1,4 @@
-<template>
+<template id="record_table_template">
     <el-table
             :data="game.records"
             style="width: 100%"
@@ -48,11 +48,19 @@
 </template>
 
 <script>
+    import Vue from "vue";
     export default {
         props: ["game"],
         methods: {
             winCountHeaderRenderer: function (h, data) {
                 let player = this.game.getPlayer(data.column.property);
+                if (player === undefined) {
+                    player = {
+                        winCountFirst: false,
+                        winCountLast: false,
+                        winCount: 0
+                    };
+                }
                 return h(
                     "div",
                     {
@@ -66,6 +74,13 @@
             },
             scoreHeaderRenderer: function (h, data) {
                 let player = this.game.getPlayer(data.column.property);
+                if (player === undefined) {
+                    player = {
+                        scoreFirst: false,
+                        scoreLast: false,
+                        score: 0
+                    };
+                }
                 return h(
                     "div",
                     {

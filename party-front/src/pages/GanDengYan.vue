@@ -1,22 +1,20 @@
 <template>
     <div id="wrapper">
         <h2>干瞪眼</h2>
-        <el-tabs type="card" :activeName="activeTabName" @tab-click="tabClicked" @tab-remove="tabRemoved">
-            <el-tab-pane label="Current" name="0">
+        <el-tabs type="card" >
+            <el-tab-pane v-for="game in games" label="Current" :key="game.id">
                 <el-row>
                     <el-col :span="6">
                         <OperationPanel :game="game" @GameOver="gameOver"></OperationPanel>
                     </el-col>
                     <el-col :span="18">
-                        <RecordTable :game="game"></RecordTable>
+                        <RecordTable :game="game" ref="currentGame" key="table"></RecordTable>
                     </el-col>
                 </el-row>
             </el-tab-pane>
             <el-tab-pane v-for="(historyGame, index) in history" :label="historyGame.date" :name="'' + (index+1)"
                          closable>
-                {{ historyGame.date }}
-            </el-tab-pane>
-            <el-tab-pane label="+" name="Add">
+                <RecordTable :game="historyGame.game"></RecordTable>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -45,6 +43,7 @@
             this._players = [];
             this._records = [];
             this._waitingPlayers = [];
+            this._id = new Date().getTime();
         }
 
         getPlayer(name) {
@@ -93,9 +92,16 @@
         }
 
         get winner() {
+            if (this._records.length === 0) {
+                return null;
+            }
             return this._players.find((currentPlayer) => {
                 return currentPlayer.rank == 1;
             }).name;
+        }
+
+        get id() {
+            return this._id;
         }
     }
 
@@ -104,31 +110,26 @@
             return {
                 game: new Game(),
                 history: [],
-                activeTabName: "0"
+                activeTabName: "0",
+                games: []
             }
         },
         methods: {
-            tabClicked: function (tab) {
-                if (tab.name == "Add") {
-                    this.addHistory();
-                    this.activeTabName = '' + this.history.length;
-                } else {
-                    this.activeTabName = tab.name;
+            gameOver: function () {
+                let winner = this.game.winner;
+                if (winner !== null) {
+                    this.$message({
+                        message: this.game.winner + " wins!",
+                        type: "success"
+                    });
+                    this.history.push({
+                        date: new Date().toDateString(),
+                        game: this.game
+                    });
+                    this.game = new Game();
+                    this.games.pop();
+                    this.games.push(this.game);
                 }
-            },
-            tabRemoved: function () {
-                this.activeTabName = '0';
-            },
-            addHistory: function () {
-                this.history.push({
-                    date: "2016-01-14"
-                });
-            },
-            gameOver: function() {
-                this.$message({
-                    message: this.game.winner + " wins!",
-                    type: "success"
-                });
             }
         },
         components: {
@@ -225,6 +226,8 @@
                 },
                 bang: 5
             });
+
+            this.games.push(this.game);
         }
     }
 </script>
