@@ -116,20 +116,20 @@
         },
         methods: {
             gameOver: function () {
-                let winner = this.game.winner;
-                if (winner !== null) {
-                    let currentGame = this.game;
-                    this.game = new Game();
-                    this.games.pop();
-                    this.games.push(this.game);
+                if (this.game.winner !== null) {
                     this.$message({
-                        message: currentGame.winner + " wins!",
+                        message: this.game.winner + " wins!",
                         type: "success"
                     });
                     this.history.push({
                         date: new Date().toDateString(),
-                        game: currentGame
+                        game: this.game
                     });
+                    this.games.pop();
+
+                    this.game = new Game();
+                    this.games.unshift(this.game);
+                    this.activeTabName = this.game.id;
                 }
             }
         },
