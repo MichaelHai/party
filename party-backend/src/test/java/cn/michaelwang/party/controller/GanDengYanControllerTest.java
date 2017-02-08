@@ -1,11 +1,13 @@
 package cn.michaelwang.party.controller;
 
+import cn.michaelwang.party.domain.Game;
 import cn.michaelwang.party.domain.Player;
 import cn.michaelwang.party.service.IGanDengYanService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
@@ -14,9 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
-public class TestGanDengYanController {
+public class GanDengYanControllerTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
@@ -28,6 +31,15 @@ public class TestGanDengYanController {
     @Before
     public void setup() {
         controller = new GanDengYanController(service);
+    }
+
+    @Test
+    public void testStartGame() {
+        Game game = mock(Game.class);
+        when(service.startGame()).thenReturn(game);
+
+        Game result = controller.startGame();
+        assertSame(game, result);
     }
 
     @Test

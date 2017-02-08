@@ -10,7 +10,8 @@
 
     <properties>
         <springframework.version>4.3.6.RELEASE</springframework.version>
-        <jackson.library>2.7.5</jackson.library>
+        <jackson.version>2.7.5</jackson.version>
+        <jsonpath.version>2.2.0</jsonpath.version>
     </properties>
 
     <dependencies>
@@ -38,7 +39,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.library}</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
@@ -52,6 +53,18 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${springframework.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${jsonpath.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path-assert</artifactId>
+            <version>${jsonpath.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
