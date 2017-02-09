@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Service
 public class GanDengYanService implements IGanDengYanService {
-    private Game game;
+    private Game game = new Game();
 
     @Override
     public Map<String, List<Player>> addPlayer(String playerName) {

@@ -101,7 +101,7 @@
             },
             addPlayer: function () {
                 if (this.nameToAdd !== null) {
-                    this.game.addNewPlayer(this.nameToAdd);
+                    this.$emit("addNewPlayer", this.nameToAdd);
                     this.nameToAdd = null;
                 }
             },

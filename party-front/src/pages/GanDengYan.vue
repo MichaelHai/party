@@ -5,7 +5,7 @@
             <el-tab-pane v-for="game in games" label="Current" :key="game.id" :name="game.id">
                 <el-row>
                     <el-col :span="6">
-                        <OperationPanel :game="game" @GameOver="gameOver"></OperationPanel>
+                        <OperationPanel :game="game" @GameOver="gameOver" @addNewPlayer="addNewPlayer"></OperationPanel>
                     </el-col>
                     <el-col :span="18">
                         <RecordTable :game="game" ref="currentGame" key="table"></RecordTable>
@@ -62,10 +62,6 @@
             this._players.push(player);
         }
 
-        addNewPlayer(playerName) {
-            this.addPlayer(new Player(playerName, 0, false, false, 0, false, false, 4));
-        }
-
         addRecord(round) {
             this._records.push(round);
         }
@@ -83,8 +79,16 @@
             return this._players;
         }
 
+        set players(players) {
+            this._players = players;
+        }
+
         get waitingPlayers() {
             return this._waitingPlayers;
+        }
+
+        set waitingPlayers(waitingPlayers) {
+            this._waitingPlayers = waitingPlayers;
         }
 
         get allPlayers() {
@@ -137,6 +141,15 @@
                         console.log("error: " + response);
                     });
                 }
+            },
+            addNewPlayer(playerName) {
+                this.$http.get('party/webapi/GanDengYan/AddPlayer/'+playerName).then(response => {
+                    let data = response.body;
+                    this.game.players = data.inGamePlayers;
+                    this.game.waitingPlayers = data.waitingPlayers;
+                }, response => {
+                    console.log("error: " + response);
+                });
             }
         },
         components: {
