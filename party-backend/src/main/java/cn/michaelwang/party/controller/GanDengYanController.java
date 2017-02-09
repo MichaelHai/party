@@ -5,6 +5,7 @@ import cn.michaelwang.party.domain.Player;
 import cn.michaelwang.party.service.IGanDengYanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,8 @@ public class GanDengYanController {
         this.service = service;
     }
 
-    public Map<String, List<Player>> addPlayer(String playerName) {
+    @GetMapping("/AddPlayer/{playerName}")
+    public Map<String, List<Player>> addPlayer(@PathVariable String playerName) {
         return service.addPlayer(playerName);
     }
 

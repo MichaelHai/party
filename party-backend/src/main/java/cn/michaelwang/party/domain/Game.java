@@ -1,5 +1,6 @@
 package cn.michaelwang.party.domain;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,9 +10,9 @@ public class Game {
     private List<Player> waitingPlayers;
 
     public Game() {
-        records = Collections.emptyList();
-        inGamePlayers = Collections.emptyList();
-        waitingPlayers = Collections.emptyList();
+        records = new ArrayList<>();
+        inGamePlayers = new ArrayList<>();
+        waitingPlayers = new ArrayList<>();
     }
 
     public List<Record> getRecords() {
@@ -24,5 +25,9 @@ public class Game {
 
     public List<Player> getWaitingPlayers() {
         return waitingPlayers;
+    }
+
+    public void addInGamePlayer(Player newPlayer) {
+        inGamePlayers.add(newPlayer);
     }
 }
