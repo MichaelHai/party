@@ -3,10 +3,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router"
 import ElementUI from 'element-ui'
+import VueResource from 'vue-resource'
 import 'element-ui/lib/theme-default/index.css'
 
 Vue.use(VueRouter);
 Vue.use(ElementUI);
+Vue.use(VueResource);
 
 import Main from "pages/Main";
 import GanDengYan from "pages/GanDengYan";

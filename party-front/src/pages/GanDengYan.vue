@@ -39,10 +39,10 @@
     }
 
     class Game {
-        constructor() {
-            this._players = [];
-            this._records = [];
-            this._waitingPlayers = [];
+        constructor(players, waitingPlayers, records) {
+            this._players = players;
+            this._waitingPlayers = waitingPlayers;
+            this._records = records;
             this._id = new Date().getTime();
         }
 
@@ -108,7 +108,7 @@
     export default {
         data() {
             return {
-                game: new Game(),
+                game: new Game([], [], []),
                 history: [],
                 activeTabName: "0",
                 games: []
@@ -127,9 +127,15 @@
                     });
                     this.games.pop();
 
-                    this.game = new Game();
-                    this.games.unshift(this.game);
-                    this.activeTabName = this.game.id;
+                    this.$http.get('party/webapi/GanDengYan/StartGame').then(response => {
+                        let data = response.body;
+                        console.log(data);
+                        this.game = new Game(data.inGamePlayers, data.waitingPlayers, data.records);
+                        this.games.unshift(this.game);
+                        this.activeTabName = this.game.id;
+                    }, response => {
+                        console.log("error: "&response);
+                    });
                 }
             }
         },
