@@ -24,7 +24,7 @@
                 <el-button @click="playerSettingVisible = true" type="primary" icon="setting" size="small"></el-button>
             </span>
         </el-form>
-        <el-dialog title="Change Players" v-model="playerSettingVisible" size="tiny">
+        <el-dialog title="Change Players" v-model="playerSettingVisible" size="tiny" @close="playerChanged">
             <el-row>
                 <el-col :span="12">
                     <h2 class="listTitle">In Game Players</h2>
@@ -113,6 +113,9 @@
             },
             gameOver: function () {
                 this.$emit('GameOver');
+            },
+            playerChanged: function() {
+
             }
         }
     }

@@ -134,7 +134,7 @@
                         this.games.unshift(this.game);
                         this.activeTabName = this.game.id;
                     }, response => {
-                        console.log("error: "&response);
+                        console.log("error: " + response);
                     });
                 }
             }
