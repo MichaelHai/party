@@ -4,10 +4,7 @@ import cn.michaelwang.party.domain.Game;
 import cn.michaelwang.party.domain.Player;
 import cn.michaelwang.party.service.IGanDengYanService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -30,5 +27,10 @@ public class GanDengYanController {
     @GetMapping("/StartGame")
     public Game startGame() {
         return service.startGame();
+    }
+
+    @PostMapping("/ChangePlayers")
+    public Map<String, List<Player>> changePlayers(@RequestBody List<String> inGamePlayers) {
+        return service.changePlayers(inGamePlayers);
     }
 }

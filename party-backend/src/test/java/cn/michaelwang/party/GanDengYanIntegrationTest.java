@@ -48,8 +48,8 @@ public class GanDengYanIntegrationTest {
     public void testAddPlayer() throws Exception {
         IGanDengYanService service = wac.getBean(IGanDengYanService.class);
         Game game = service.startGame();
-        game.getInGamePlayers().add(new Player("inGamePlayer"));
-        game.getWaitingPlayers().add(new Player("waitingPlayer"));
+        game.addInGamePlayer(new Player("inGamePlayer"));
+        game.addWaitingPlayer(new Player("waitingPlayer"));
 
         mockMvc.perform(get("/GanDengYan/AddPlayer/wh"))
                 .andExpect(status().isOk())

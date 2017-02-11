@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,5 +51,16 @@ public class GanDengYanControllerTest {
 
         Map<String, List<Player>> playersResult = controller.addPlayer("playerName");
         assertSame(players, playersResult);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testChangePlayers() {
+        List<String> inGamePlayers = mock(List.class);
+        Map<String, List<Player>> currentPlayers = mock(Map.class);
+        when(service.changePlayers(inGamePlayers)).thenReturn(currentPlayers);
+
+        Map<String, List<Player>> result = controller.changePlayers(inGamePlayers);
+        assertSame(result, currentPlayers);
     }
 }

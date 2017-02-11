@@ -17,17 +17,27 @@ public class GanDengYanService implements IGanDengYanService {
         Player newPlayer = new Player(playerName);
         game.addInGamePlayer(newPlayer);
 
-        Map<String, List<Player>> result = new HashMap<>();
-
-        result.put("inGamePlayers", game.getInGamePlayers());
-        result.put("waitingPlayers", game.getWaitingPlayers());
-
-        return result;
+        return getPlayersMap();
     }
 
     @Override
     public Game startGame() {
         game = new Game();
         return game;
+    }
+
+    @Override
+    public Map<String, List<Player>> changePlayers(List<String> inGamePlayers) {
+        game.changeInGamePlayers(inGamePlayers);
+
+        return getPlayersMap();
+    }
+
+    private Map<String, List<Player>> getPlayersMap() {
+        Map<String, List<Player>> result = new HashMap<>();
+
+        result.put("inGamePlayers", game.getInGamePlayers());
+        result.put("waitingPlayers", game.getWaitingPlayers());
+        return result;
     }
 }

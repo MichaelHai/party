@@ -115,7 +115,7 @@
                 this.$emit('GameOver');
             },
             playerChanged: function() {
-
+                this.$emit("PlayerChanged");
             }
         }
     }

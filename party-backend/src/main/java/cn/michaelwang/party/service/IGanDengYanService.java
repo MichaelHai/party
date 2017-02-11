@@ -10,4 +10,6 @@ public interface IGanDengYanService {
     Map<String, List<Player>> addPlayer(String playerName);
 
     Game startGame();
+
+    Map<String, List<Player>> changePlayers(List<String> inGamePlayers);
 }

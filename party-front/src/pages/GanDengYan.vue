@@ -5,14 +5,16 @@
             <el-tab-pane v-for="game in games" label="Current" :key="game.id" :name="game.id">
                 <el-row>
                     <el-col :span="6">
-                        <OperationPanel :game="game" @GameOver="gameOver" @addNewPlayer="addNewPlayer"></OperationPanel>
+                        <OperationPanel :game="game" @GameOver="gameOver" @addNewPlayer="addNewPlayer"
+                                        @PlayerChanged="playerChanged"></OperationPanel>
                     </el-col>
                     <el-col :span="18">
                         <RecordTable :game="game" ref="currentGame" key="table"></RecordTable>
                     </el-col>
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane v-for="(historyGame, index) in history" :label="historyGame.date" :name="historyGame.game.id" :key="historyGame.game.id"
+            <el-tab-pane v-for="(historyGame, index) in history" :label="historyGame.date" :name="historyGame.game.id"
+                         :key="historyGame.game.id"
                          closable>
                 <RecordTable :game="historyGame.game"></RecordTable>
             </el-tab-pane>
@@ -137,19 +139,27 @@
                         this.game = new Game(data.inGamePlayers, data.waitingPlayers, data.records);
                         this.games.unshift(this.game);
                         this.activeTabName = this.game.id;
-                    }, response => {
-                        console.log("error: " + response);
-                    });
+                    }, this.printError);
                 }
             },
             addNewPlayer(playerName) {
-                this.$http.get('party/webapi/GanDengYan/AddPlayer/'+playerName).then(response => {
-                    let data = response.body;
-                    this.game.players = data.inGamePlayers;
-                    this.game.waitingPlayers = data.waitingPlayers;
-                }, response => {
-                    console.log("error: " + response);
-                });
+                this.$http.get('party/webapi/GanDengYan/AddPlayer/' + playerName).then(
+                    this.retrievePlayersFromResponse,
+                    this.printError);
+            },
+            playerChanged() {
+                let inGamePlayers = this.game.players.map(player => player.name);
+                this.$http.post('party/webapi/GanDengYan/ChangePlayers', inGamePlayers).then(
+                    this.retrievePlayersFromResponse,
+                    this.printError);
+            },
+            retrievePlayersFromResponse(response) {
+                let data = response.body;
+                this.game.players = data.inGamePlayers;
+                this.game.waitingPlayers = data.waitingPlayers;
+            },
+            printError(response) {
+                console.log("error: " + response);
             }
         },
         components: {
