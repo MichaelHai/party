@@ -70,7 +70,7 @@ public class GanDengYanServiceTest {
     }
 
     @Test
-    public void testAddPlayers() {
+    public void testChangePlayers() {
         Game game = service.startGame();
         Player player1 = mock(Player.class, "player1");
         when(player1.getName()).thenReturn("player1");

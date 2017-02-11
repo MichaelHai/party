@@ -39,6 +39,10 @@ public class Player {
         return score;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public boolean getScoreFirst() {
         return scoreFirst;
     }
