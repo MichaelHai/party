@@ -12,4 +12,6 @@ public interface IGanDengYanService {
     Game startGame();
 
     Map<String, List<Player>> changePlayers(List<String> inGamePlayers);
+
+    Game getCurrentGame();
 }

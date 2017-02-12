@@ -41,11 +41,12 @@
     }
 
     class Game {
-        constructor(players, waitingPlayers, records) {
+        constructor(players, waitingPlayers, records, id) {
             this._players = players;
             this._waitingPlayers = waitingPlayers;
             this._records = records;
-            this._id = new Date().getTime();
+            this._id = id;
+            console.log(id);
         }
 
         getPlayer(name) {
@@ -114,7 +115,7 @@
     export default {
         data() {
             return {
-                game: new Game([], [], []),
+                game: null,
                 history: [],
                 activeTabName: "0",
                 games: []
@@ -136,7 +137,7 @@
                     this.$http.get('party/webapi/GanDengYan/StartGame').then(response => {
                         let data = response.body;
                         console.log(data);
-                        this.game = new Game(data.inGamePlayers, data.waitingPlayers, data.records);
+                        this.game = new Game(data.inGamePlayers, data.waitingPlayers, data.records, data.id);
                         this.games.unshift(this.game);
                         this.activeTabName = this.game.id;
                     }, this.printError);
@@ -167,98 +168,13 @@
             RecordTable
         },
         mounted() {
-            this.game.addPlayer(new Player("wh", 1, true, false, 10, true, false, 1));
-            this.game.addPlayer(new Player("cxy", 0, false, true, 0, false, true, 2));
-            this.game.addPlayer(new Player("zxc", 0, false, false, 0, false, true, 3));
-            this.game.addRecord({
-                wh: {
-                    remain: 0,
-                    score: 1
-                },
-                cxy: {
-                    remain: 1,
-                    score: -1
-                },
-                bang: 0
-            });
-            this.game.addRecord({
-                wh: {
-                    remain: 22,
-                    score: 1
-                },
-                cxy: {
-                    remain: 5,
-                    score: -10
-                },
-                zxc: {
-                    remain: 1,
-                    score: -2
-                },
-                bang: 1
-            });
-            this.game.addRecord({
-                wh: {
-                    remain: 1,
-                    score: -4
-                },
-                cxy: {
-                    remain: 0,
-                    score: -8
-                },
-                zxc: {
-                    remain: 1,
-                    score: -4
-                },
-                bang: 2
-            });
-            this.game.addRecord({
-                wh: {
-                    remain: 1,
-                    score: -8
-                },
-                cxy: {
-                    remain: 1,
-                    score: -8
-                },
-                zxc: {
-                    remain: 0,
-                    score: 16
-                },
-                bang: 3
-            });
-            this.game.addRecord({
-                wh: {
-                    remain: 1,
-                    score: -16
-                },
-                cxy: {
-                    remain: 0,
-                    score: 32
-                },
-                zxc: {
-                    remain: 1,
-                    score: -16
-                },
-                bang: 4
-            });
-            this.game.addRecord({
-                wh: {
-                    remain: 0,
-                    score: 352
-                },
-                cxy: {
-                    remain: 1,
-                    score: -32
-                },
-                zxc: {
-                    remain: 5,
-                    score: -320
-                },
-                bang: 5
-            });
-
-            this.games.push(this.game);
-            this.activeTabName = this.game.id;
+            this.$http.get("/party/webapi/GanDengYan/CurrentGame").then(
+                response => {
+                    let data = response.data;
+                    this.game = new Game(data.inGamePlayers, data.waitingPlayers, data.records, data.id);
+                    this.games.push(this.game);
+                    this.activeTabName = this.game.id;
+                }, this.printError);
         }
     }
 </script>

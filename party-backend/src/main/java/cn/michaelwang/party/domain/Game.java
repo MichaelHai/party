@@ -1,20 +1,19 @@
 package cn.michaelwang.party.domain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Game {
     private List<Record> records;
     private List<Player> inGamePlayers;
     private List<Player> waitingPlayers;
+    private String id;
 
     public Game() {
         records = new ArrayList<>();
         inGamePlayers = new ArrayList<>();
         waitingPlayers = new ArrayList<>();
+        id = new Date().toString();
     }
 
     public List<Record> getRecords() {
@@ -27,6 +26,10 @@ public class Game {
 
     public List<Player> getWaitingPlayers() {
         return Collections.unmodifiableList(waitingPlayers);
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public void addInGamePlayer(Player player) {

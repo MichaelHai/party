@@ -105,4 +105,13 @@ public class GanDengYanServiceTest {
         assertEquals(1, waitingPlayers.size());
         assertSame(player4, waitingPlayers.get(0));
     }
+
+    @Test
+    public void testCurrentGame() {
+        Game game = service.startGame();
+
+        Game result = service.getCurrentGame();
+
+        assertSame(game, result);
+    }
 }

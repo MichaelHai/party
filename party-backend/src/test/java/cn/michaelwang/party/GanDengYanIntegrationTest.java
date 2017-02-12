@@ -96,4 +96,16 @@ public class GanDengYanIntegrationTest {
                 .andExpect(jsonPath("$.waitingPlayers[0].name", equalTo("player4")));
     }
 
+    @Test
+    public void testCurrentGame() throws Exception {
+        IGanDengYanService service = wac.getBean(IGanDengYanService.class);
+        service.startGame();
+
+        mockMvc.perform(get("/GanDengYan/CurrentGame"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.records", hasSize(0)))
+                .andExpect(jsonPath("$.inGamePlayers", hasSize(0)))
+                .andExpect(jsonPath("$.waitingPlayers", hasSize(0)));
+    }
+
 }

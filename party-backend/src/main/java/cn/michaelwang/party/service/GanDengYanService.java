@@ -33,6 +33,11 @@ public class GanDengYanService implements IGanDengYanService {
         return getPlayersMap();
     }
 
+    @Override
+    public Game getCurrentGame() {
+        return this.game;
+    }
+
     private Map<String, List<Player>> getPlayersMap() {
         Map<String, List<Player>> result = new HashMap<>();
 

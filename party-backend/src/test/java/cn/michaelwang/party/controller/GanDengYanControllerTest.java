@@ -63,4 +63,13 @@ public class GanDengYanControllerTest {
         Map<String, List<Player>> result = controller.changePlayers(inGamePlayers);
         assertSame(result, currentPlayers);
     }
+
+    @Test
+    public void testCurrentGame() {
+        Game game = mock(Game.class);
+        when(service.getCurrentGame()).thenReturn(game);
+
+        Game result = controller.currentGame();
+        assertSame(game, result);
+    }
 }

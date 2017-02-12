@@ -33,4 +33,9 @@ public class GanDengYanController {
     public Map<String, List<Player>> changePlayers(@RequestBody List<String> inGamePlayers) {
         return service.changePlayers(inGamePlayers);
     }
+
+    @GetMapping("/CurrentGame")
+    public Game currentGame() {
+        return service.getCurrentGame();
+    }
 }
