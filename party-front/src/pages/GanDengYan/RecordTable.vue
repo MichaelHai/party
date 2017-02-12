@@ -101,10 +101,10 @@
                 return remain === -1 ? '/' : remain;
             },
             getScore: function (player, index) {
-                return this.getRemainCards(player, index) === -1 ? '/' : this.game.records[index][player].score;
+                return this.getRemainCards(player, index) === -1 ? '/' : this.game.records[index].entities[player].score;
             },
             getRemainCards: function (player, index) {
-                let recordOfPlayer = this.game.records[index][player];
+                let recordOfPlayer = this.game.records[index].entities[player];
                 return recordOfPlayer == undefined ? -1 : recordOfPlayer.remain;
             }
         }

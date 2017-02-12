@@ -20,6 +20,10 @@ public class Game {
         return Collections.unmodifiableList(records);
     }
 
+    public void addRecord(Record record) {
+        this.records.add(record);
+    }
+
     public List<Player> getInGamePlayers() {
         return Collections.unmodifiableList(inGamePlayers);
     }
@@ -53,6 +57,6 @@ public class Game {
         this.waitingPlayers.removeAll(waitingToInGame);
         this.waitingPlayers.addAll(inGameToWaiting);
 
-        this.inGamePlayers.sort(Comparator.comparingInt(Player::getScore).reversed());
+        this.inGamePlayers.sort(Comparator.comparingInt(player -> newInGamePlayers.indexOf(player.getName())));
     }
 }

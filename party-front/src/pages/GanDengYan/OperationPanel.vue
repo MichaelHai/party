@@ -94,9 +94,11 @@
                     this.$message.error("Please fill in the status for " + empty + ".");
                     return;
                 }
-                record.bang = this.bang;
 
-                this.game.record(record);
+                this.$emit("record", {
+                    record: record,
+                    bang: this.bang
+                });
                 this.initData();
             },
             addPlayer: function () {
@@ -112,10 +114,10 @@
                 this.bang = 0;
             },
             gameOver: function () {
-                this.$emit('GameOver');
+                this.$emit('gameOver');
             },
             playerChanged: function() {
-                this.$emit("PlayerChanged");
+                this.$emit("playerChanged");
             }
         }
     }

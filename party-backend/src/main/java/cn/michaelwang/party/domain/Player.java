@@ -8,6 +8,7 @@ public class Player {
     private int score;
     private boolean scoreFirst;
     private boolean scoreLast;
+    private int rank;
 
     public Player(String playerName) {
         this.name = playerName;
@@ -17,6 +18,7 @@ public class Player {
         score = 0;
         scoreFirst = false;
         scoreLast = false;
+        rank = -1;
     }
 
     public String getName() {
@@ -49,5 +51,56 @@ public class Player {
 
     public boolean getScoreLast() {
         return scoreLast;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setWinCount(int winCount) {
+        this.winCount = winCount;
+    }
+
+    public boolean isWinCountFirst() {
+        return winCountFirst;
+    }
+
+    public void setWinCountFirst(boolean winCountFirst) {
+        this.winCountFirst = winCountFirst;
+    }
+
+    public boolean isWinCountLast() {
+        return winCountLast;
+    }
+
+    public void setWinCountLast(boolean winCountLast) {
+        this.winCountLast = winCountLast;
+    }
+
+    public boolean isScoreFirst() {
+        return scoreFirst;
+    }
+
+    public void setScoreFirst(boolean scoreFirst) {
+        this.scoreFirst = scoreFirst;
+    }
+
+    public boolean isScoreLast() {
+        return scoreLast;
+    }
+
+    public void setScoreLast(boolean scoreLast) {
+        this.scoreLast = scoreLast;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public void addScore(int score) {
+        this.score += score;
+        if (score > 0) {
+            winCount++;
+        }
     }
 }

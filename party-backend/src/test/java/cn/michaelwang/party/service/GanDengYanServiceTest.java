@@ -2,20 +2,20 @@ package cn.michaelwang.party.service;
 
 import cn.michaelwang.party.domain.Game;
 import cn.michaelwang.party.domain.Player;
+import cn.michaelwang.party.domain.Record;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class GanDengYanServiceTest {
     @Rule
@@ -23,9 +23,12 @@ public class GanDengYanServiceTest {
 
     private GanDengYanService service;
 
+    @Mock
+    private IRecordCalculator recordCalculator;
+
     @Before
     public void setup() {
-        service = new GanDengYanService();
+        service = new GanDengYanService(recordCalculator);
     }
 
     @Test
@@ -88,7 +91,7 @@ public class GanDengYanServiceTest {
         when(player4.getName()).thenReturn("player4");
         game.addWaitingPlayer(player4);
 
-        List<String> newInGamePlayers = Arrays.asList("player1", "player2", "player3");
+        List<String> newInGamePlayers = Arrays.asList("player2", "player3", "player1");
         Map<String, List<Player>> result = service.changePlayers(newInGamePlayers);
 
         assertNotNull(result);
@@ -113,5 +116,25 @@ public class GanDengYanServiceTest {
         Game result = service.getCurrentGame();
 
         assertSame(game, result);
+    }
+
+    @Test
+    public void testAddRecord() {
+        Game game = service.startGame();
+        game.addInGamePlayer(new Player("player1"));
+        game.addInGamePlayer(new Player("player2"));
+        game.addInGamePlayer(new Player("player3"));
+
+        @SuppressWarnings("unchecked") Map<String, Integer> rawCards = mock(Map.class);
+        Record record = mock(Record.class);
+        when(recordCalculator.calculate(rawCards, 4)).thenReturn(record);
+        when(record.getScore("player1")).thenReturn(-32);
+        when(record.getScore("player2")).thenReturn(-160);
+        when(record.getScore("player3")).thenReturn(192);
+
+        Record result = service.addRecord(rawCards, 4);
+
+        assertSame(record, result);
+        verify(recordCalculator).updateGame(game, record);
     }
 }

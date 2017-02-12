@@ -2,20 +2,20 @@ package cn.michaelwang.party.controller;
 
 import cn.michaelwang.party.domain.Game;
 import cn.michaelwang.party.domain.Player;
+import cn.michaelwang.party.domain.Record;
 import cn.michaelwang.party.service.IGanDengYanService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
@@ -71,5 +71,21 @@ public class GanDengYanControllerTest {
 
         Game result = controller.currentGame();
         assertSame(game, result);
+    }
+
+    @Test
+    public void testAddRecord() {
+        Map<String, Integer> rawCards = new HashMap<>();
+        Record record = mock(Record.class);
+        when(service.addRecord(rawCards, 0)).thenReturn(record);
+        Game game = mock(Game.class);
+        when(service.getCurrentGame()).thenReturn(game);
+        @SuppressWarnings("unchecked") List<Player> inGamePlayers = mock(List.class);
+        when(game.getInGamePlayers()).thenReturn(inGamePlayers);
+
+        RecordResult result = controller.addRecord(rawCards, 0);
+        assertNotNull(result);
+        assertSame(record, result.getRecord());
+        assertSame(inGamePlayers, result.getInGamePlayers());
     }
 }

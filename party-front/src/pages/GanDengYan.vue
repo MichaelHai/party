@@ -5,8 +5,8 @@
             <el-tab-pane v-for="game in games" label="Current" :key="game.id" :name="game.id">
                 <el-row>
                     <el-col :span="6">
-                        <OperationPanel :game="game" @GameOver="gameOver" @addNewPlayer="addNewPlayer"
-                                        @PlayerChanged="playerChanged"></OperationPanel>
+                        <OperationPanel :game="game" @gameOver="gameOver" @addNewPlayer="addNewPlayer"
+                                        @playerChanged="playerChanged" @record="record"></OperationPanel>
                     </el-col>
                     <el-col :span="18">
                         <RecordTable :game="game" ref="currentGame" key="table"></RecordTable>
@@ -27,26 +27,12 @@
     import OperationPanel from "pages/GanDengYan/OperationPanel"
     import Vue from "vue"
 
-    class Player {
-        constructor(name, winCount, winCountFirst, winCountLast, score, scoreFirst, scoreLast, rank) {
-            this.name = name;
-            this.winCount = winCount;
-            this.winCountFirst = winCountFirst;
-            this.winCountLast = winCountLast;
-            this.score = score;
-            this.scoreFirst = scoreFirst;
-            this.scoreLast = scoreLast;
-            this.rank = rank;
-        }
-    }
-
     class Game {
         constructor(players, waitingPlayers, records, id) {
             this._players = players;
             this._waitingPlayers = waitingPlayers;
             this._records = records;
             this._id = id;
-            console.log(id);
         }
 
         getPlayer(name) {
@@ -67,11 +53,6 @@
 
         addRecord(round) {
             this._records.push(round);
-        }
-
-        record(record) {
-            // TODO communicate with backend
-            console.log(record);
         }
 
         get records() {
@@ -136,7 +117,6 @@
 
                     this.$http.get('party/webapi/GanDengYan/StartGame').then(response => {
                         let data = response.body;
-                        console.log(data);
                         this.game = new Game(data.inGamePlayers, data.waitingPlayers, data.records, data.id);
                         this.games.unshift(this.game);
                         this.activeTabName = this.game.id;
@@ -161,6 +141,15 @@
             },
             printError(response) {
                 console.log("error: " + response);
+            },
+            record(data) {
+                this.$http.post('party/webapi/GanDengYan/AddRecord/' + data.bang, data.record).then(
+                    response => {
+                        let data = response.body;
+                        this.game.records.push(data.record);
+                        this.game.players = data.inGamePlayers;
+                    }, this.printError
+                );
             }
         },
         components: {

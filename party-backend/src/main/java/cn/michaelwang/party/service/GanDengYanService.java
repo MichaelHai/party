@@ -2,6 +2,7 @@ package cn.michaelwang.party.service;
 
 import cn.michaelwang.party.domain.Game;
 import cn.michaelwang.party.domain.Player;
+import cn.michaelwang.party.domain.Record;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -11,6 +12,12 @@ import java.util.Map;
 @Service
 public class GanDengYanService implements IGanDengYanService {
     private Game game = new Game();
+
+    private IRecordCalculator recordCalculator;
+
+    public GanDengYanService(IRecordCalculator recordCalculator) {
+        this.recordCalculator = recordCalculator;
+    }
 
     @Override
     public Map<String, List<Player>> addPlayer(String playerName) {
@@ -36,6 +43,14 @@ public class GanDengYanService implements IGanDengYanService {
     @Override
     public Game getCurrentGame() {
         return this.game;
+    }
+
+    @Override
+    public Record addRecord(Map<String, Integer> rawCards, int bang) {
+        Record record = recordCalculator.calculate(rawCards, bang);
+        recordCalculator.updateGame(game, record);
+
+        return record;
     }
 
     private Map<String, List<Player>> getPlayersMap() {

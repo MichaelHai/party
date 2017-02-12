@@ -86,7 +86,7 @@ public class GanDengYanIntegrationTest {
         game.addWaitingPlayer(player4);
 
         mockMvc.perform(post("/GanDengYan/ChangePlayers")
-                .contentType(MediaType.APPLICATION_JSON).content("[\"player1\", \"player2\", \"player3\"]"))
+                .contentType(MediaType.APPLICATION_JSON).content("[\"player2\", \"player3\", \"player1\"]"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.inGamePlayers", hasSize(3)))
                 .andExpect(jsonPath("$.inGamePlayers[0].name", equalTo("player2")))
@@ -107,5 +107,4 @@ public class GanDengYanIntegrationTest {
                 .andExpect(jsonPath("$.inGamePlayers", hasSize(0)))
                 .andExpect(jsonPath("$.waitingPlayers", hasSize(0)));
     }
-
 }

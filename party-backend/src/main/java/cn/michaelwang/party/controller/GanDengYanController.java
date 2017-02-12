@@ -2,6 +2,7 @@ package cn.michaelwang.party.controller;
 
 import cn.michaelwang.party.domain.Game;
 import cn.michaelwang.party.domain.Player;
+import cn.michaelwang.party.domain.Record;
 import cn.michaelwang.party.service.IGanDengYanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +38,13 @@ public class GanDengYanController {
     @GetMapping("/CurrentGame")
     public Game currentGame() {
         return service.getCurrentGame();
+    }
+
+    @PostMapping("/AddRecord/{bang}")
+    public RecordResult addRecord(@RequestBody Map<String, Integer> rawCards, @PathVariable int bang) {
+        Record record = service.addRecord(rawCards, bang);
+        List<Player> inGamePlayers = service.getCurrentGame().getInGamePlayers();
+
+        return new RecordResult(record, inGamePlayers);
     }
 }
