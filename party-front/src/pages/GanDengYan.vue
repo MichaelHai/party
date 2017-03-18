@@ -148,6 +148,7 @@
                         let data = response.body;
                         this.game.records.push(data.record);
                         this.game.players = data.inGamePlayers;
+                        this.game.waitingPlayers = data.waitingPlayers;
                     }, this.printError
                 );
             }

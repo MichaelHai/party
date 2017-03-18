@@ -44,7 +44,8 @@ public class GanDengYanController {
     public RecordResult addRecord(@RequestBody Map<String, Integer> rawCards, @PathVariable int bang) {
         Record record = service.addRecord(rawCards, bang);
         List<Player> inGamePlayers = service.getCurrentGame().getInGamePlayers();
+        List<Player> waitingPlayers = service.getCurrentGame().getWaitingPlayers();
 
-        return new RecordResult(record, inGamePlayers);
+        return new RecordResult(record, inGamePlayers, waitingPlayers);
     }
 }

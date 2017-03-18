@@ -82,10 +82,13 @@ public class GanDengYanControllerTest {
         when(service.getCurrentGame()).thenReturn(game);
         @SuppressWarnings("unchecked") List<Player> inGamePlayers = mock(List.class);
         when(game.getInGamePlayers()).thenReturn(inGamePlayers);
+        List<Player> waitingPlayers = mock(List.class);
+        when(game.getWaitingPlayers()).thenReturn(waitingPlayers);
 
         RecordResult result = controller.addRecord(rawCards, 0);
         assertNotNull(result);
         assertSame(record, result.getRecord());
         assertSame(inGamePlayers, result.getInGamePlayers());
+        assertSame(waitingPlayers, result.getWaitingPlayers());
     }
 }
