@@ -27,7 +27,7 @@ const router = new VueRouter({
     routes
 });
 
-import App from "./App";
+import App from "./ui/App";
 const app = new Vue({
     render: h => h(App),
     router

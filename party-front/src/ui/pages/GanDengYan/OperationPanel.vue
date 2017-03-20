@@ -55,9 +55,9 @@
         props: ["game"],
         data() {
             return {
-                remain: [],
+                remain: new Array(this.game.players.length).fill(0),
                 winner: null,
-                disabled: [],
+                disabled: new Array(this.game.players.length).fill(false),
                 bang: 0,
                 playerSettingVisible: false,
                 nameToAdd: null
@@ -108,9 +108,9 @@
                 }
             },
             initData: function () {
-                this.remain = [];
+                this.remain = new Array(this.game.players.length).fill(0);
                 this.winner = null;
-                this.disabled = [];
+                this.disabled = new Array(this.game.players.length).fill(false);
                 this.bang = 0;
             },
             gameOver: function () {
