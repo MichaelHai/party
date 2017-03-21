@@ -93,19 +93,15 @@
                 )
             },
             getRemainingCardIndicator: function (player, index) {
-                let remain = this.getRemainCards(player, index);
+                let remain = this.game.getRemainCards(player, index);
                 return remain === 0 ? 'empty_hand' : (remain === 5 ? 'full_hand' : '');
             },
             getRemain: function (player, index) {
-                let remain = this.getRemainCards(player, index);
+                let remain = this.game.getRemainCards(player, index);
                 return remain === -1 ? '/' : remain;
             },
             getScore: function (player, index) {
-                return this.getRemainCards(player, index) === -1 ? '/' : this.game.records[index].entities[player].score;
-            },
-            getRemainCards: function (player, index) {
-                let recordOfPlayer = this.game.records[index].entities[player];
-                return recordOfPlayer == undefined ? -1 : recordOfPlayer.remain;
+                return this.game.getRemainCards(player, index) === -1 ? '/' : this.game.getScore(player, index);
             }
         }
     }

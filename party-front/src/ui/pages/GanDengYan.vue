@@ -26,7 +26,7 @@
     import RecordTable from "pages/GanDengYan/RecordTable"
     import OperationPanel from "pages/GanDengYan/OperationPanel"
     import Game from "assets/GanDengYan/Game"
-    import GameController from "assets/GanDengYan/GameController"
+    import GanDengYanController from "assets/GanDengYan/GanDengYanController"
 
     export default {
         data() {
@@ -35,12 +35,12 @@
                 history: [],
                 activeTabName: "0",
                 games: [],
-                gameController: new GameController(this.$http)
+                ganDengYanController: new GanDengYanController(this.$http)
             }
         },
         methods: {
             gameOver() {
-                this.gameController.gameOver(this.game,
+                this.ganDengYanController.gameOver(this.game,
                     (message, historyItem, newGame) => {
                         this.$message({
                             message: message,
@@ -54,20 +54,19 @@
                 );
             },
             addNewPlayer(playerName) {
-                this.gameController.addNewPlayer(playerName, this.setPlayers);
+                this.ganDengYanController.addNewPlayer(playerName, this.setPlayers);
             },
             playerChanged() {
-                this.gameController.playerChanged(this.game.players, this.setPlayers);
+                this.ganDengYanController.playerChanged(this.game.players, this.setPlayers);
             },
             record(data) {
-                this.gameController.record(data,
+                this.ganDengYanController.record(data,
                     (record, inGamePlayers, waitingPlayers) => {
                         this.game.records.push(record);
                         this.setPlayers(inGamePlayers, waitingPlayers);
                     }
                 );
             },
-
             setPlayers(inGamePlayers, waitingPlayers) {
                 this.game.players = inGamePlayers;
                 this.game.waitingPlayers = waitingPlayers;
@@ -83,7 +82,7 @@
             RecordTable
         },
         mounted() {
-            this.gameController.getCurrentGame(this.setGame);
+            this.ganDengYanController.getCurrentGame(this.setGame);
         }
     }
 </script>

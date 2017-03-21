@@ -50,6 +50,7 @@
 
 <script>
     import Draggable from "vuedraggable"
+    import OperationPanelController from "assets/GanDengyan/OperationPanelController"
 
     export default {
         props: ["game"],
@@ -60,7 +61,8 @@
                 disabled: new Array(this.game.players.length).fill(false),
                 bang: 0,
                 playerSettingVisible: false,
-                nameToAdd: null
+                nameToAdd: null,
+                controller: new OperationPanelController()
             }
         },
         components: {
@@ -73,33 +75,22 @@
                     return player.name == this.winner;
                 }, this);
                 this.remain[winnerIndex] = 0;
-                this.disabled = [];
+                this.disabled = new Array(this.game.players.length).fill(false);
                 this.disabled[winnerIndex] = true;
             },
             record: function () {
-                if (this.winner == null) {
-                    this.$message.error("Please choose a winner!");
-                    return;
-                }
-
-                let record = {};
-                let empty = [];
-                this.game.players.findIndex((player, index) => {
-                    if (this.remain[index] === 0 && player.name != this.winner) {
-                        empty.push(player.name);
+                this.controller.record(this.game, this.remain, this.winner,
+                    record => {
+                        this.$emit("record", {
+                            record: record,
+                            bang: this.bang
+                        });
+                        this.initData();
+                    },
+                    failMessage => {
+                        this.$message.error(failMessage);
                     }
-                    record[player.name] = this.remain[index];
-                });
-                if (empty.length !== 0) {
-                    this.$message.error("Please fill in the status for " + empty + ".");
-                    return;
-                }
-
-                this.$emit("record", {
-                    record: record,
-                    bang: this.bang
-                });
-                this.initData();
+                );
             },
             addPlayer: function () {
                 if (this.nameToAdd !== null) {

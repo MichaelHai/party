@@ -2,7 +2,7 @@
 
 import Game from "assets/GanDengYan/Game"
 
-module.exports = class GameController {
+module.exports = class GanDengYanController {
     constructor(http) {
         this.$http = http;
     }
@@ -19,7 +19,7 @@ module.exports = class GameController {
                 let data = response.body;
                 let newGame = new Game(data.inGamePlayers, data.waitingPlayers, data.records, data.id);
                 success(winnerMessage, historyItem, newGame);
-            }, GameController.printError);
+            }, GanDengYanController.printError);
         }
     }
 
@@ -27,7 +27,7 @@ module.exports = class GameController {
         let retriever = new PlayerRetriever(playerSetter);
         this.$http.get('party/webapi/GanDengYan/AddPlayer/' + playerName).then(
             retriever.retrievePlayersFromResponse.bind(retriever),
-            GameController.printError);
+            GanDengYanController.printError);
     }
 
     playerChanged(inGamePlayers, playerSetter) {
@@ -35,7 +35,7 @@ module.exports = class GameController {
         let retriever = new PlayerRetriever(playerSetter);
         this.$http.post('party/webapi/GanDengYan/ChangePlayers', inGamePlayerNames).then(
             retriever.retrievePlayersFromResponse.bind(retriever),
-            GameController.printError);
+            GanDengYanController.printError);
     }
 
     static printError(response) {
@@ -47,7 +47,7 @@ module.exports = class GameController {
             response => {
                 let data = response.body;
                 recorded(data.record, data.inGamePlayers, data.waitingPlayers);
-            }, GameController.printError
+            }, GanDengYanController.printError
         );
     }
 
@@ -56,7 +56,7 @@ module.exports = class GameController {
             response => {
                 let data = response.data;
                 gameReceived(new Game(data.inGamePlayers, data.waitingPlayers, data.records, data.id));
-            }, GameController.printError);
+            }, GanDengYanController.printError);
     }
 };
 

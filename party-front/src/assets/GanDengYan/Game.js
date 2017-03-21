@@ -64,4 +64,13 @@ module.exports = class Game {
     get id() {
         return this._id.toString();
     }
+
+    getRemainCards(player, index) {
+        let recordOfPlayer = this._records[index].entities[player];
+        return recordOfPlayer == undefined ? -1 : recordOfPlayer.remain;
+    }
+
+    getScore(player, index) {
+        return this._records[index].entities[player].score;
+    }
 };
