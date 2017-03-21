@@ -8,26 +8,6 @@ module.exports = class Game {
         this._id = id;
     }
 
-    getPlayer(name) {
-        let player = this._players.find((currentPlayer) => {
-            return name == currentPlayer.name;
-        }, this);
-        if (player === undefined) {
-            player = this._waitingPlayers.find((currentPlayer) => {
-                return name == currentPlayer.name;
-            }, this);
-        }
-        return player;
-    }
-
-    addPlayer(player) {
-        this._players.push(player);
-    }
-
-    addRecord(round) {
-        this._records.push(round);
-    }
-
     get records() {
         return this._records;
     }
@@ -63,6 +43,26 @@ module.exports = class Game {
 
     get id() {
         return this._id.toString();
+    }
+
+    getPlayer(name) {
+        let player = this._players.find((currentPlayer) => {
+            return name == currentPlayer.name;
+        }, this);
+        if (player === undefined) {
+            player = this._waitingPlayers.find((currentPlayer) => {
+                return name == currentPlayer.name;
+            }, this);
+        }
+        return player;
+    }
+
+    addPlayer(player) {
+        this._players.push(player);
+    }
+
+    addRecord(round) {
+        this._records.push(round);
     }
 
     getRemainCards(player, index) {
