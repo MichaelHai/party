@@ -12,6 +12,7 @@ import java.util.Map;
 @Service
 public class GanDengYanService implements IGanDengYanService {
     private Game game = new Game();
+    private ContinuousWinCounter continuousWinCounter = new ContinuousWinCounter();
 
     private IRecordCalculator recordCalculator;
 
@@ -47,7 +48,7 @@ public class GanDengYanService implements IGanDengYanService {
 
     @Override
     public Record addRecord(Map<String, Integer> rawCards, int bang) {
-        Record record = recordCalculator.calculate(rawCards, bang);
+        Record record = recordCalculator.calculate(rawCards, bang, continuousWinCounter);
         recordCalculator.updateGame(game, record);
 
         return record;

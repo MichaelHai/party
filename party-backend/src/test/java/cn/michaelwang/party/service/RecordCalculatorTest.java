@@ -7,11 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class RecordCalculatorTest {
     private RecordCalculator recordCalculator;
@@ -24,11 +24,12 @@ public class RecordCalculatorTest {
     @Test
     public void testWithoutBangAndFullCards() {
         Map<String, Integer> rawRecord = new HashMap<>();
+        ContinuousWinCounter continuousWinCounter = new ContinuousWinCounter();
         rawRecord.put("player1", 0);
         rawRecord.put("player2", 2);
         rawRecord.put("player3", 1);
 
-        Record record = recordCalculator.calculate(rawRecord, 0);
+        Record record = recordCalculator.calculate(rawRecord, 0, continuousWinCounter);
         assertNotNull(record);
         Map<String, Record.RecordEntity> recordEntities = record.getEntities();
         assertNotNull(recordEntities);
@@ -53,8 +54,9 @@ public class RecordCalculatorTest {
         rawRecord.put("player1", 5);
         rawRecord.put("player2", 0);
         rawRecord.put("player3", 1);
+        ContinuousWinCounter continuousWinCounter = new ContinuousWinCounter();
 
-        Record record = recordCalculator.calculate(rawRecord, 0);
+        Record record = recordCalculator.calculate(rawRecord, 0, continuousWinCounter);
         assertNotNull(record);
         Map<String, Record.RecordEntity> recordEntities = record.getEntities();
         assertNotNull(recordEntities);
@@ -79,8 +81,9 @@ public class RecordCalculatorTest {
         rawRecord.put("player1", 2);
         rawRecord.put("player2", 4);
         rawRecord.put("player3", 0);
+        ContinuousWinCounter continuousWinCounter = new ContinuousWinCounter();
 
-        Record record = recordCalculator.calculate(rawRecord, 1);
+        Record record = recordCalculator.calculate(rawRecord, 1, continuousWinCounter);
         assertNotNull(record);
         Map<String, Record.RecordEntity> recordEntities = record.getEntities();
         assertNotNull(recordEntities);
@@ -105,8 +108,9 @@ public class RecordCalculatorTest {
         rawRecord.put("player1", 4);
         rawRecord.put("player2", 0);
         rawRecord.put("player3", 1);
+        ContinuousWinCounter continuousWinCounter = new ContinuousWinCounter();
 
-        Record record = recordCalculator.calculate(rawRecord, 3);
+        Record record = recordCalculator.calculate(rawRecord, 3, continuousWinCounter);
         assertNotNull(record);
         Map<String, Record.RecordEntity> recordEntities = record.getEntities();
         assertNotNull(recordEntities);
@@ -131,8 +135,9 @@ public class RecordCalculatorTest {
         rawRecord.put("player1", 2);
         rawRecord.put("player2", 5);
         rawRecord.put("player3", 0);
+        ContinuousWinCounter continuousWinCounter = new ContinuousWinCounter();
 
-        Record record = recordCalculator.calculate(rawRecord, 4);
+        Record record = recordCalculator.calculate(rawRecord, 4, continuousWinCounter);
         assertNotNull(record);
         Map<String, Record.RecordEntity> recordEntities = record.getEntities();
         assertNotNull(recordEntities);
@@ -149,6 +154,35 @@ public class RecordCalculatorTest {
         assertEquals(0, player3Record.getRemain());
         assertEquals(192, player3Record.getScore());
         assertEquals(4, record.getBang());
+    }
+
+    @Test
+    public void testContinuousWin() {
+        Map<String, Integer> rawRecord = new HashMap<>();
+        rawRecord.put("player1", 4);
+        rawRecord.put("player2", 0);
+        rawRecord.put("player3", 1);
+
+        ContinuousWinCounter continuousWinCounter = mock(ContinuousWinCounter.class);
+        when(continuousWinCounter.getCount()).thenReturn(2);
+
+        Record record = recordCalculator.calculate(rawRecord, 3, continuousWinCounter);
+        assertNotNull(record);
+        Map<String, Record.RecordEntity> recordEntities = record.getEntities();
+        assertNotNull(recordEntities);
+        Record.RecordEntity player1Record = recordEntities.get("player1");
+        assertNotNull(player1Record);
+        assertEquals(4, player1Record.getRemain());
+        assertEquals(-64, player1Record.getScore());
+        Record.RecordEntity player2Record = recordEntities.get("player2");
+        assertNotNull(player1Record);
+        assertEquals(0, player2Record.getRemain());
+        assertEquals(80, player2Record.getScore());
+        Record.RecordEntity player3Record = recordEntities.get("player3");
+        assertNotNull(player1Record);
+        assertEquals(1, player3Record.getRemain());
+        assertEquals(-16, player3Record.getScore());
+        assertEquals(3, record.getBang());
     }
 
     @Test

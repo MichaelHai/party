@@ -127,7 +127,7 @@ public class GanDengYanServiceTest {
 
         @SuppressWarnings("unchecked") Map<String, Integer> rawCards = mock(Map.class);
         Record record = mock(Record.class);
-        when(recordCalculator.calculate(rawCards, 4)).thenReturn(record);
+        when(recordCalculator.calculate(eq(rawCards), eq(4), any())).thenReturn(record);
         when(record.getScore("player1")).thenReturn(-32);
         when(record.getScore("player2")).thenReturn(-160);
         when(record.getScore("player3")).thenReturn(192);
