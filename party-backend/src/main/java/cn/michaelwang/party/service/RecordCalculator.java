@@ -5,6 +5,7 @@ import cn.michaelwang.party.domain.Player;
 import cn.michaelwang.party.domain.Record;
 import org.springframework.stereotype.Component;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,18 +13,17 @@ import java.util.Map;
 @Component
 public class RecordCalculator implements IRecordCalculator {
     @Override
-    public Record calculate(Map<String, Integer> rawCards, int bang) {
+    public Record calculate(Map<String, Integer> rawCards, int bang, ContinuousWinCounter continuousWinCounter) {
         Record record = new Record();
 
-        String winner = null;
+        String winner = getWinner(rawCards);
+        continuousWinCounter.nextWinner(winner);
         int winnerScore = 0;
         for (Map.Entry<String, Integer> entry : rawCards.entrySet()) {
             String player = entry.getKey();
             Integer numberOfCards = entry.getValue();
-            if (numberOfCards == 0) {
-                winner = player;
-            } else {
-                int scoreLost = calculateLostScore(numberOfCards, bang);
+            if (!winner.equals(player)) {
+                int scoreLost = calculateLostScore(numberOfCards, bang, continuousWinCounter.getCount());
                 record.addRecord(player, numberOfCards, scoreLost);
                 winnerScore += -scoreLost;
             }
@@ -98,7 +98,17 @@ public class RecordCalculator implements IRecordCalculator {
         }
     }
 
-    private int calculateLostScore(int numberOfCards, int bang) {
-        return (numberOfCards == 5 ? -10 : -numberOfCards) * (int)Math.pow(2, bang);
+    private String getWinner(Map<String, Integer> rawCards) {
+        for (Map.Entry<String, Integer> entry: rawCards.entrySet()) {
+            if (entry.getValue() == 0) {
+                return entry.getKey();
+            }
+        }
+
+        throw new InvalidParameterException("No winner found");
+    }
+
+    private int calculateLostScore(int numberOfCards, int bang, int continuousWinCount) {
+        return (numberOfCards == 5 ? -10 : -numberOfCards) * (int)Math.pow(2, bang + continuousWinCount - 1);
     }
 }

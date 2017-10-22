@@ -6,7 +6,7 @@ import cn.michaelwang.party.domain.Record;
 import java.util.Map;
 
 public interface IRecordCalculator {
-    Record calculate(Map<String, Integer> rawCards, int bang);
+    Record calculate(Map<String, Integer> rawCards, int bang, ContinuousWinCounter continuousWinCounter);
 
     void updateGame(Game game, Record record);
 }
